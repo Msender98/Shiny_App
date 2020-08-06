@@ -6,21 +6,20 @@
 #
 #    http://shiny.rstudio.com/
 #
+#NOTES:  Choose a few cities. Analysis of that city/cities. User activity and/or ... closing...
 
-library(shiny)
+library(leaflet)
+set.seed(42)
+yelp_business = sample_n(yelp_business, 1000)
+
+points = cbind(as.numeric(yelp_business$longitude), as.numeric(yelp_business$latitude))
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
 
-    output$distPlot <- renderPlot({
-
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
-
+    output$map2 <- renderLeaflet({
+        leaflet() %>% addTiles() %>% 
+            addMarkers(data = points, popup = yelp_business$name)
     })
 
 })

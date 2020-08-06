@@ -13,6 +13,17 @@ library(leaflet)
 # Define UI for application that draws a histogram
 shinyUI(dashboardPage(
     dashboardHeader(title= "Yelp"),
-    dashboardSidebar(),
-    dashboardBody()
+    dashboardSidebar(
+        sidebarMenu(
+            menuItem("Map", tabName = "map", icon = icon("map")),
+            menuItem("Data", tabName = "data", icon = icon("database")))
+    ),
+    dashboardBody(
+        tabItems(
+            tabItem(tabName = "map",
+                   fluidRow(box(leafletOutput("map2")))),
+            tabItem(tabName = "data",
+                    "to be replaced with datatable"))
+    )
 ))
+
