@@ -1,3 +1,6 @@
-
+*.Rmd
 *.json
-
+*.git
+data
+yelp_data_exploration.nb.html
+*.Rdata
