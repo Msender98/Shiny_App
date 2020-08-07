@@ -10,16 +10,18 @@
 
 library(leaflet)
 set.seed(42)
-yelp_business = sample_n(yelp_business, 1000)
 
-points = cbind(as.numeric(yelp_business$longitude), as.numeric(yelp_business$latitude))
-
-# Define server logic required to draw a histogram
-shinyServer(function(input, output) {
-
+shinyServer(function(input, output, session) {
+    
+    datesFiltered = reactive({
+        yelp_checkin_long_filt %>% filter(.,date >= input$date_range[1] & date <= input$date_range[2]) %>% 
+        transmute(long = as.numeric(longitude), lat = as.numeric(latitude)) %>% cbind(.$long,.$lat)
+        
+      })
+    
     output$map2 <- renderLeaflet({
         leaflet() %>% addTiles() %>% 
-            addMarkers(data = points, popup = yelp_business$name)
+            addMarkers(data = datesFiltered())
     })
 
 })

@@ -9,7 +9,7 @@
 
 library(shinydashboard)
 library(leaflet)
-
+library(lubridate)
 # Define UI for application that draws a histogram
 shinyUI(dashboardPage(
     dashboardHeader(title= "Yelp"),
@@ -21,9 +21,18 @@ shinyUI(dashboardPage(
     dashboardBody(
         tabItems(
             tabItem(tabName = "map",
-                   fluidRow(box(leafletOutput("map2")))),
+                   fluidRow(box(leafletOutput("map2"))),
+                   dateRangeInput('date_range',"Date Range:",
+                                  start = '2019-01-01',
+                                  end = '2019-02-01',
+                                  min = '2019-01-01',
+                                  max = '2019-05-01',
+                                  format = 'mm-dd-yyyy',)
+            
+                   ),
             tabItem(tabName = "data",
                     "to be replaced with datatable"))
+        
     )
 ))
 
