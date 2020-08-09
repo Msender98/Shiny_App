@@ -18,13 +18,11 @@ shinyServer(function(input, output, session) {
     
     dat = reactive({
       yelp_nevada2 %>% filter(unlist(lapply(yelp_nevada2$categories, function(x) input$category %in% x))) %>%
-        filter(is_open == input$open) %>%
-        select(stars, !!as.name(input$selected)) %>% 
-        mutate(xaxis = !!as.name(input$selected)) 
+        filter(is_open == input$open)
     })
     
     output$plot <- renderPlot({
-          ggplot(data = dat(), aes(x = xaxis, y = stars)) + geom_boxplot() + ggtitle('Stars')
+          ggplot(data = dat(), aes_string(x = input$selected, y = 'stars')) + geom_boxplot() + ggtitle('Stars')
     })
 })
 

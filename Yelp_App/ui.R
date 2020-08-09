@@ -15,8 +15,7 @@ shinyUI(dashboardPage(
     dashboardHeader(title= "Yelp"),
     dashboardSidebar(
         sidebarMenu(
-            menuItem("Map", tabName = "map", icon = icon("map")),
-            menuItem("Plots", tabName = 'plots', icon = icon('chart-bar')),
+            menuItem("Business", tabName = 'business', icon = icon('chart-bar')),
             menuItem("Data", tabName = "data", icon = icon("database")))
     ),
     dashboardBody(
@@ -25,7 +24,7 @@ shinyUI(dashboardPage(
                    fluidRow(box(leafletOutput("map2")))
             
                    ),
-            tabItem(tabName = "Business",
+            tabItem(tabName = "business",
                     fluidPage(
                         plotOutput('plot'),
                         
