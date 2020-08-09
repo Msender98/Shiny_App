@@ -15,22 +15,28 @@ shinyUI(dashboardPage(
     dashboardHeader(title= "Yelp"),
     dashboardSidebar(
         sidebarMenu(
+            menuItem('Map', tabName = 'MAP', icon = icon('map')),
             menuItem("Business", tabName = 'business', icon = icon('chart-bar')),
-            menuItem("Data", tabName = "data", icon = icon("database")))
+            menuItem("Data", tabName = "data", icon = icon("database"))),
+            selectizeInput('category', 'Category', choices = category$categories)
     ),
     dashboardBody(
         tabItems(
-            tabItem(tabName = "map",
-                   fluidRow(box(leafletOutput("map2")))
-            
-                   ),
+            tabItem(tabName = 'MAP',
+                    fluidPage(
+                        leafletOutput('map')
+                    #add checkboxes with different inputs or something
+                    )
+                    ),
             tabItem(tabName = "business",
                     fluidPage(
-                        plotOutput('plot'),
                         
-                        selectizeInput('selected', 'Feature', choices = c('review_count', 'Income','Unemployment','Poverty')),
-                        selectizeInput('category', 'Category', choices = category$categories),
-                        checkboxInput('open','Is Open', value = TRUE)
+                        plotOutput('plot'),
+                        plotOutput('hist'),
+                        fluidRow(
+                        selectizeInput('selected', 'Feature', choices = c('review_count','daily_checkins', 'Income','Unemployment','Poverty')),
+                        checkboxInput('log','Log_x', value = TRUE),
+                        checkboxInput('open','Is Open', value = TRUE))
                         )
                              
                     ),
