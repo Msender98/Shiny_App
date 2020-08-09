@@ -18,26 +18,29 @@ shinyUI(dashboardPage(
             menuItem('Map', tabName = 'MAP', icon = icon('map')),
             menuItem("Business", tabName = 'business', icon = icon('chart-bar')),
             menuItem("Data", tabName = "data", icon = icon("database"))),
-            selectizeInput('category', 'Category', choices = category$categories)
+            selectizeInput('category', 'Category', choices = category$categories),
+            checkboxInput('open','Is Open', value = TRUE)
     ),
     dashboardBody(
         tabItems(
             tabItem(tabName = 'MAP',
                     fluidPage(
-                        leafletOutput('map')
+                        leafletOutput('map'),
                     #add checkboxes with different inputs or something
+                        #plotOutput('hist'),
+                        selectizeInput('business', 'Business Feature', choices = c('total_business','daily_checkins','avg_star_2019'))
                     )
                     ),
             tabItem(tabName = "business",
                     fluidPage(
                         
                         plotOutput('plot'),
-                        plotOutput('hist'),
                         fluidRow(
-                        selectizeInput('selected', 'Feature', choices = c('review_count','daily_checkins', 'Income','Unemployment','Poverty')),
-                        checkboxInput('log','Log_x', value = TRUE),
-                        checkboxInput('open','Is Open', value = TRUE))
-                        )
+                            selectizeInput('selectedx', 'Feature_X', choices = c('review_count','daily_checkins', 'Income','Unemployment','Poverty')),
+                            selectizeInput('selectedy', 'Feature_Y', choices = c('review_count','daily_checkins', 'Income','Unemployment','Poverty','avg_star_2019')),
+                            checkboxInput('logx','Log_x', value = TRUE),
+                            checkboxInput('logy','Log_y', value = FALSE)
+                        ))
                              
                     ),
             tabItem(tabName = "data",
