@@ -25,12 +25,12 @@ shinyServer(function(input, output, session) {
     
     color_data = reactive({
       nevada_geocodes %>% 
-        mutate(color = select(.,contains(input$demo))[[1]]) %>% mutate(color = (normalize(color)+1)/2)
+        mutate(color = select(.,contains(input$demo))[[1]]) 
     })
     
     
     output$map <- renderLeaflet({
-      leaflet() %>% addTiles() %>% fitBounds(-115.49, 35.9, -114.8, 36.44)  
+      leaflet(options = leafletOptions(minZoom = 10)) %>% addTiles() %>% fitBounds(-115.49, 35.9, -114.8, 36.44)  
  
     })
     
@@ -52,7 +52,7 @@ shinyServer(function(input, output, session) {
                             count %>% transmute(total_business = n)
         min_n = min(filt_data$total_business)
         max_n = max(filt_data$total_business)
-        filt_data = filt_data %>% transmute(colum = (total_business-min_n)/(max_n-min_n))
+        filt_data = filt_data %>% mutate(colum = total_business) %>% mutate(normalized_colum = (total_business-min_n)/(max_n-min_n))
         
       }else{
         dat = dat()
@@ -60,25 +60,36 @@ shinyServer(function(input, output, session) {
                             group_by(CensusTract) %>% 
                             filter(!is.na(colum)) %>%
                             summarise(colum = mean(colum)) %>% 
-                            mutate(colum = normalize(colum))
+                            mutate(normalized_colum = normalize(colum))
       }
       
-      pal = colorBin("Greens",c(0:100)/100)
-     
       geo_color = color_data()
       
-      geo_data = geo_color %>% left_join(.,filt_data, by = 'CensusTract')
+      pal = colorBin("plasma", geo_color$color)
+     
       
-      leafletProxy('map', data = geo_data) %>% clearShapes() %>% 
+      
+      geo_data = geo_color %>% left_join(.,filt_data, by = 'CensusTract')
+       
+      leafletProxy('map', data = geo_data) %>% clearShapes() %>% clearControls() %>%
             addCircles(lat = geo_data$centerlat, lng = geo_data$centerlng, 
-                       radius = geo_data$colum*2000, 
+                       radius = geo_data$normalized_colum*2500, 
                        fillColor = ~pal(geo_data$color), 
-                       fillOpacity = .9, 
-                       stroke = FALSE)
+                       fillOpacity = .5,
+                       stroke = FALSE,
+                       label = paste(sprintf('%s: %.0f',input$business, geo_data$colum)," | ",sprintf('%s: %.0f',input$demo, geo_data$color))
+                         ) %>% 
+            addLegend(position = 'topright',
+                      pal = pal,
+                      values = geo_color$color,
+                      title = input$demo)
+            
       #add circles with heat maps at each location instead. Circle radius represent business (# of business. Or #of checkins. Or avg stars.)
       #Colored by demographic. Income, ...
     })
     
-})
+    
+    
+}) 
 
 

@@ -1,6 +1,6 @@
 library(leaflet)
 library(plotly)
-
+library(viridis)
 library(shinydashboard)
 library(leaflet)
 library(lubridate)
