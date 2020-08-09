@@ -11,6 +11,9 @@ library(shinydashboard)
 library(leaflet)
 library(lubridate)
 # Define UI for application that draws a histogram
+
+analysis_vars = c('review_count','daily_checkins', 'Income','Unemployment','Poverty','avg_star_2019')
+
 shinyUI(dashboardPage(
     dashboardHeader(title= "Yelp"),
     dashboardSidebar(
@@ -26,8 +29,6 @@ shinyUI(dashboardPage(
             tabItem(tabName = 'MAP',
                     fluidPage(
                         leafletOutput('map'),
-                    #add checkboxes with different inputs or something
-                        #plotOutput('hist'),
                         selectizeInput('business', 'Business Feature', choices = c('total_business','daily_checkins','review_count','avg_star_2019')),
                         selectizeInput('demo', 'Demographic', choices = c('Income','Unemployment','Poverty','TotalPop'))
                     )
@@ -36,12 +37,25 @@ shinyUI(dashboardPage(
                     fluidPage(
                         
                         plotOutput('plot'),
+                        
                         fluidRow(
-                            selectizeInput('selectedx', 'Feature_X', choices = c('review_count','daily_checkins', 'Income','Unemployment','Poverty')),
-                            selectizeInput('selectedy', 'Feature_Y', choices = c('review_count','daily_checkins', 'Income','Unemployment','Poverty','avg_star_2019')),
-                            checkboxInput('logx','Log_x', value = TRUE),
-                            checkboxInput('logy','Log_y', value = FALSE)
-                        ))
+                            column(5,
+                                   checkboxInput('smooth', 'Best Fit Line', value = FALSE)
+                                   )
+                        ),
+                        
+                        fluidRow(
+                            column(5,
+                                   selectizeInput('selectedx', 'X - Axis', 
+                                                  choices = analysis_vars),
+                                   checkboxInput('logx','Log_x', value = TRUE)
+                                   ),
+                                
+                            column(5,
+                                   selectizeInput('selectedy', 'Y - Axis', choices = analysis_vars),
+                                   checkboxInput('logy','Log_y', value = FALSE) )
+                            )
+                        )
                              
                     ),
             tabItem(tabName = "data",

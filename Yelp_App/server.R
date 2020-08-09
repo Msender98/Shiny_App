@@ -39,6 +39,7 @@ shinyServer(function(input, output, session) {
           g = ggplot(data = dat(), aes_string(x = input$selectedx, y = input$selectedy)) + geom_point() + ggtitle('Stars')
           if(input$logx){g = g + scale_x_log10()}
           if(input$logy){g = g + scale_y_log10()}
+          if(input$smooth){g = g + geom_smooth()}
           g
     })
     
