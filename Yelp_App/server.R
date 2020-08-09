@@ -9,19 +9,23 @@
 #NOTES:  Choose a few cities. Analysis of that city/cities. User activity and/or ... closing...
 
 library(leaflet)
-set.seed(42)
+library(plotly)
+
 
 shinyServer(function(input, output, session) {
     
-    datesFiltered = reactive({
-        yelp_checkin_long_filt %>% filter(.,date >= input$date_range[1] & date <= input$date_range[2]) %>% 
-        transmute(long = as.numeric(longitude), lat = as.numeric(latitude)) %>% cbind(.$long,.$lat)
-        
-      })
     
-    output$map2 <- renderLeaflet({
-        leaflet() %>% addTiles() %>% 
-            addMarkers(data = datesFiltered())
+    
+    dat = reactive({
+      yelp_nevada2 %>% filter(unlist(lapply(yelp_nevada2$categories, function(x) input$category %in% x))) %>%
+        filter(is_open == input$open) %>%
+        select(stars, !!as.name(input$selected)) %>% 
+        mutate(xaxis = !!as.name(input$selected)) 
     })
-
+    
+    output$plot <- renderPlot({
+          ggplot(data = dat(), aes(x = xaxis, y = stars)) + geom_boxplot() + ggtitle('Stars')
+    })
 })
+
+

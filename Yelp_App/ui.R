@@ -16,20 +16,25 @@ shinyUI(dashboardPage(
     dashboardSidebar(
         sidebarMenu(
             menuItem("Map", tabName = "map", icon = icon("map")),
+            menuItem("Plots", tabName = 'plots', icon = icon('chart-bar')),
             menuItem("Data", tabName = "data", icon = icon("database")))
     ),
     dashboardBody(
         tabItems(
             tabItem(tabName = "map",
-                   fluidRow(box(leafletOutput("map2"))),
-                   dateRangeInput('date_range',"Date Range:",
-                                  start = '2019-01-01',
-                                  end = '2019-02-01',
-                                  min = '2019-01-01',
-                                  max = '2019-05-01',
-                                  format = 'mm-dd-yyyy',)
+                   fluidRow(box(leafletOutput("map2")))
             
                    ),
+            tabItem(tabName = "Business",
+                    fluidPage(
+                        plotOutput('plot'),
+                        
+                        selectizeInput('selected', 'Feature', choices = c('review_count', 'Income','Unemployment','Poverty')),
+                        selectizeInput('category', 'Category', choices = category$categories),
+                        checkboxInput('open','Is Open', value = TRUE)
+                        )
+                             
+                    ),
             tabItem(tabName = "data",
                     "to be replaced with datatable"))
         
