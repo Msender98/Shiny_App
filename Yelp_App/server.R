@@ -23,17 +23,16 @@ shinyServer(function(input, output, session) {
         filter(is_open == input$open)
     })
     
-   
+    color_data = reactive({
+      nevada_geocodes %>% 
+        mutate(color = select(.,contains(input$demo))[[1]]) %>% mutate(color = (normalize(color)+1)/2)
+    })
+    
     
     output$map <- renderLeaflet({
       leaflet() %>% addTiles() %>% fitBounds(-115.49, 35.9, -114.8, 36.44)  
  
     })
-    
-    # output$hist <- renderPlot({
-    #   h = ggplot(data = dat(), aes_string() )
-    #   hist of category of restaurant in census tracts
-      
     
     
     output$plot <- renderPlot({
@@ -43,8 +42,8 @@ shinyServer(function(input, output, session) {
           g
     })
     
+    
     observe({
-      
       
       if(input$business == 'total_business'){
         dat = dat()
@@ -63,10 +62,19 @@ shinyServer(function(input, output, session) {
                             summarise(colum = mean(colum)) %>% 
                             mutate(colum = normalize(colum))
       }
-      geo_data = nevada_geocodes %>% inner_join(., filt_data, by='CensusTract')
       
-      leafletProxy('map') %>% clearShapes() %>% 
-            addCircles(data = geo_data, lat = geo_data$centerlat, lng = geo_data$centerlng, radius = geo_data$colum*2000)
+      pal = colorBin("Greens",c(0:100)/100)
+     
+      geo_color = color_data()
+      
+      geo_data = geo_color %>% left_join(.,filt_data, by = 'CensusTract')
+      
+      leafletProxy('map', data = geo_data) %>% clearShapes() %>% 
+            addCircles(lat = geo_data$centerlat, lng = geo_data$centerlng, 
+                       radius = geo_data$colum*2000, 
+                       fillColor = ~pal(geo_data$color), 
+                       fillOpacity = .9, 
+                       stroke = FALSE)
       #add circles with heat maps at each location instead. Circle radius represent business (# of business. Or #of checkins. Or avg stars.)
       #Colored by demographic. Income, ...
     })

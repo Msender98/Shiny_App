@@ -28,7 +28,8 @@ shinyUI(dashboardPage(
                         leafletOutput('map'),
                     #add checkboxes with different inputs or something
                         #plotOutput('hist'),
-                        selectizeInput('business', 'Business Feature', choices = c('total_business','daily_checkins','avg_star_2019'))
+                        selectizeInput('business', 'Business Feature', choices = c('total_business','daily_checkins','review_count','avg_star_2019')),
+                        selectizeInput('demo', 'Demographic', choices = c('Income','Unemployment','Poverty','TotalPop'))
                     )
                     ),
             tabItem(tabName = "business",
