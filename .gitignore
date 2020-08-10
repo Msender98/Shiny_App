@@ -6,3 +6,4 @@ yelp_data_exploration.nb.html
 *.Rdata
 *.ipynb
 .ipynb_checkpoints
+*dcf

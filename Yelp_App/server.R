@@ -8,12 +8,6 @@
 #
 
 
-#NOTES:  Choose a few cities. Analysis of that city/cities. User activity and/or ... closing...
-
-library(leaflet)
-library(plotly)
-
-
 shinyServer(function(input, output, session) {
     
     
@@ -36,12 +30,20 @@ shinyServer(function(input, output, session) {
     
     
     output$plot <- renderPlot({
-          g = ggplot(data = dat(), aes_string(x = input$selectedx, y = input$selectedy)) + geom_point() + ggtitle('Stars')
+          g = ggplot(data = dat(), aes_string(x = input$selectedx, y = input$selectedy)) + 
+            geom_point() + 
+            ggtitle(sprintf('%s versus %s', input$selectedy, input$selectedx))
           if(input$logx){g = g + scale_x_log10()}
           if(input$logy){g = g + scale_y_log10()}
           if(input$smooth){g = g + geom_smooth()}
+          if(input$jitter){g = g + geom_jitter(width = 1, height = 1)}
           g
     })
+    
+    output$table <- DT::renderDataTable({
+      datatable(yelp_nevada, rownames=FALSE) 
+    })
+
     
     
     observe({
@@ -78,7 +80,7 @@ shinyServer(function(input, output, session) {
                        fillColor = ~pal(geo_data$color), 
                        fillOpacity = .5,
                        stroke = FALSE,
-                       label = paste(sprintf('%s: %.0f',input$business, geo_data$colum)," | ",sprintf('%s: %.0f',input$demo, geo_data$color))
+                       label = paste(sprintf('%s: %.1f',input$business, geo_data$colum)," | ",sprintf('%s: %.0f',input$demo, geo_data$color))
                          ) %>% 
             addLegend(position = 'topright',
                       pal = pal,
