@@ -31,12 +31,13 @@ shinyServer(function(input, output, session) {
     
     output$plot <- renderPlot({
           g = ggplot(data = dat(), aes_string(x = input$selectedx, y = input$selectedy)) + 
-            geom_point() + 
+            geom_point(alpha = input$opacity) + 
             ggtitle(sprintf('%s versus %s', input$selectedy, input$selectedx))
           if(input$logx){g = g + scale_x_log10()}
           if(input$logy){g = g + scale_y_log10()}
-          if(input$smooth){g = g + geom_smooth()}
-          if(input$jitter){g = g + geom_jitter(width = 1, height = 1)}
+          if(input$smooth){g = g + geom_smooth(method = 'lm')}
+          if(input$smooth_pm){g = g + geom_smooth(method = "gam", color = "green")}
+          if(input$jitter){g = g + geom_jitter(width = .5, height = .5)}
           g
     })
     

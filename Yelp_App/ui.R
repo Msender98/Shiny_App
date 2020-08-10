@@ -11,7 +11,7 @@
 # Define UI for application that draws a histogram
 
 demographic_vars = c('Income','Unemployment','Poverty','TotalPop','IncomePerCap','Professional',
-                     'Service','Office','Construction',
+                     'Service','Office','Construction', 'Production',
                      'Drive','Carpool','Transit','Walk')
 
 yelp_vars = c('total_business','daily_checkins','review_count','avg_star_2019','sd_2019')
@@ -54,8 +54,20 @@ shinyUI(dashboardPage(
                         'daily_checkins: The average daily checkins for businesses in a region', br(),
                         'review_count: Average number of reviews for each business in a region', br(),
                         'avg_star_2019: Average yelp review stars', br(),
-                        'Income: Median income in a region', br(),
-                        'Unemployment: %Unemployed in a region'
+                        'Income: Median income in a region in $', br(),
+                        'Unemployment: % Unemployed in a region', br(),
+                        'Poverty: % living in poverty in a region', br(),
+                        'TotalPop: Total poplution in a region', br(),
+                        'IncomePerCap: Income per capita in $', br(),
+                        'Professional: % of residents in management, business, science, and arts', br(),
+                        'Service: % of residents working in service industry', br(),
+                        'Office: % of residents employed in sales and office jobs', br(),
+                        'Construction: % of residents employed in natural resources and construction', br(),
+                        'Production: % of residents employed in production and transportation', br(),
+                        'Drive: % of residents commuting alone in car, van or truck', br(),
+                        'Carpool: % of residents carpooling in car, van or truck', br(),
+                        'Transit: % of residents commuting on public transportation', br(),
+                        'Walk: % of residents walking to work',br()
                         
                         
                     )
@@ -66,11 +78,15 @@ shinyUI(dashboardPage(
                         plotOutput('plot'),
                         
                         fluidRow(
-                            column(5,
-                                   checkboxInput('smooth', 'Best Fit Line', value = FALSE)
+                            column(3,
+                                   checkboxInput('smooth', 'Linear Best Fit', value = FALSE),
+                                   checkboxInput('smooth_pm', 'Polynomial Best Fit', value = FALSE)
                                    ),
-                            column(5,
-                                   checkboxInput('jitter', 'Add Jiter', value = FALSE)
+                            column(5, 
+                                   sliderInput('opacity' ,'Opacity', min = 0, max = 1, value = 0.5), offset = 1
+                                   ),
+                            column(2,
+                                   checkboxInput('jitter', 'Add Jitter', value = FALSE)
                                    )
                         ),
                         
@@ -92,8 +108,20 @@ shinyUI(dashboardPage(
                         'avg_star_2019: Average yelp review stars', br(),
                         'review_count: Number of yelp reviews', br(),
                         'daily_checkins: Average daily checkin for a business', br(),
-                        'Income: Median income in the businesses reigon', br(),
-                        '...'
+                        'Income: Median income in the businesses reigon in $', br(),
+                        'Unemployment: % Unemployed in a region', br(),
+                        'Poverty: % living in poverty in a region', br(),
+                        'TotalPop: Total poplution in a region', br(),
+                        'IncomePerCap: Income per capita in $', br(),
+                        'Professional: % of residents in management, business, science, and arts', br(),
+                        'Service: % of residents working in service industry', br(),
+                        'Office: % of residents employed in sales and office jobs', br(),
+                        'Construction: % of residents employed in natural resources and construction', br(),
+                        'Production: % of residents employed in production and transportation', br(),
+                        'Drive: % of residents commuting alone in car, van or truck', br(),
+                        'Carpool: % of residents carpooling in car, van or truck', br(),
+                        'Transit: % of residents commuting on public transportation', br(),
+                        'Walk: % of residents walking to work',br()
                         
                         )
                              
