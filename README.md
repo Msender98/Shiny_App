@@ -1,6 +1,6 @@
 This App was created while studying at the NYC Data Science Academy. The data is sourced from:
 
-https://www.kaggle.com/yelp-dataset/yelp-dataset
+https://www.kaggle.com/yelp-dataset/yelp-dataset  
 https://www.kaggle.com/muonneutrino/us-census-demographic-data
 https://geo.fcc.gov/api/census/#!/area/get_area
 
