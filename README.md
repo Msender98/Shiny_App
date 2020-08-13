@@ -1,3 +1,5 @@
+Visualize yelp business and demographic data in Las Vegas, NV. Look at the distribution of businesses grouped by category around the city and explore the relationship between features. 
+
 This App was created while studying at the NYC Data Science Academy. The data is sourced from:
 
 https://www.kaggle.com/yelp-dataset/yelp-dataset  
