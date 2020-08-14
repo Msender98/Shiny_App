@@ -17,7 +17,7 @@ def get_block_fips(latitude,longitude):
 
 def get_bbox(latitude,longitude):
     '''
-    Gets the census block_fips of a latitude and longitude using: 
+    Gets the census tract bounding box of a latitude and longitude using: 
     https://geo.fcc.gov/api/census/#!/area/get_area
     '''
     r = requests.get(f'https://geo.fcc.gov/api/census/area?lat={latitude}&lon={longitude}&format=json')
