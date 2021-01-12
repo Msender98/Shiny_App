@@ -1,5 +1,5 @@
 # Business in Vegas Dashboard
-## About
+## About:
 This app visualizes yelp's business and US Census demographic data in Las Vegas, NV. Users can look at the distribution of businesses grouped by category around the city and explore the relationship between features. Checkout the final app at: <strong>https://msender98.shinyapps.io/Yelp_Visualiazation_App/</strong>
 
 This app was created while studying at the NYC Data Science Academy.
